@@ -41,11 +41,23 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
         child: Center(
           child: Column(
             children: [
+              ToggleButtons(
+                onPressed: (index) {
+                  if (index == 1) {
+                    pickImage(ImageSource.camera);
+                  }
+                },
+                isSelected: [true, false],
+                children: const [
+                  SizedBox(width: 80,child: Center(child: Text("Gallery"))),
+                  SizedBox(width: 80,child: Center(child: Text("Camera"))),
+                ]
+              ),
               Spacer(),
               Stack(
                 children: [
                   InkWell(
-                    onTap: pickImage,
+                    onTap: () => pickImage(ImageSource.gallery),
                     child: selectedImage == null ? DottedBorder(
                       dashPattern: [5,5],
                       color: Colors.black,
@@ -104,10 +116,10 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
     setState(() {});
   }
 
-  Future<void> pickImage() async {
+  Future<void> pickImage(ImageSource source) async {
 
     final picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
+    final image = await picker.pickImage(source: source);
 
     if (image == null) {
       return;
