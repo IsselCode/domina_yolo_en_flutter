@@ -6,6 +6,7 @@ import 'package:domina_yolo_en_flutter/src/views/results_view.dart';
 import 'package:domina_yolo_en_flutter/src/widgets/drop_down_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ultralytics_yolo/ultralytics_yolo.dart';
 
@@ -18,16 +19,10 @@ class DetectionMinimumsView extends StatefulWidget {
 
 class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
 
-  late YOLO yolo;
+  YOLO? yolo;
   Uint8List? selectedImage;
   bool isLoading = false;
   Map<String, dynamic>? results;
-
-  @override
-  void initState() {
-    super.initState();
-    loadModel();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +44,7 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
                 width: 300,
                 child: DropDownWidget(
                   selected: null,
-                  onChanged: (value) {
-                    print(value);
-                  },
+                  onChanged: (value) => loadModel(value!),
                 ),
               ),
 
@@ -78,7 +71,7 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
                     right: selectedImage == null ? 5 : 53,
                     child: IconButton(
                       style: IconButton.styleFrom(backgroundColor: Colors.white),
-                      onPressed: () => pickImage(ImageSource.camera),
+                      onPressed: () async => await pickImage(ImageSource.camera),
                       icon: Icon(Icons.camera_alt)
                     ),
                   ),
@@ -102,19 +95,11 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
               FilledButton(
                 onPressed: selectedImage != null && !isLoading ? detect : null,
                 style: FilledButton.styleFrom(
-                  fixedSize: Size(width * 0.8, 50)
+                  fixedSize: Size(width * 0.8, 50),
+                  disabledBackgroundColor: Colors.grey
                 ),
                 child: Text("Detectar")
               ),
-              const SizedBox(height: 20,),
-              FilledButton(
-                onPressed: results != null ? () => viewResults(context) : null,
-                style: FilledButton.styleFrom(
-                  fixedSize: Size(width * 0.8, 50)
-                ),
-                child: Text("Resultados")
-              ),
-              const SizedBox(height: 20,)
             ],
           ),
         ),
@@ -122,14 +107,22 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
     );
   }
 
-  Future<void> loadModel() async {
+  Future<void> loadModel(TensorflowModel model) async {
 
     isLoading = true;
     setState(() {});
 
-    yolo = YOLO(modelPath: "tubos_float16", task: YOLOTask.detect);
-    await yolo.loadModel();
+    // Liberar instancia previa (si existe)
+    if (yolo != null) {
+      await yolo!.dispose(); // importante para limpiar la instancia nativa
+      yolo = null;
+    }
 
+    // Crear nueva instancia con el modelo seleccionado
+    yolo = YOLO(modelPath: model.asset, task: YOLOTask.detect);
+    await yolo!.loadModel();
+
+    // Finalizar para habilitar el botón nuevamente
     isLoading = false;
     setState(() {});
   }
@@ -157,13 +150,27 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
   }
 
   Future<void> detect() async {
-    setState(() {isLoading = true;});
-    results = await yolo.predict(selectedImage!, confidenceThreshold: 0.5);
-    setState(() {isLoading = false;});
-  }
 
-  void viewResults(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsView(results: results!,),));
+    if (yolo == null) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Necesitar seleccionar un modelo")
+      ));
+      return;
+    }
+
+    try {
+      setState(() {isLoading = true;});
+      results = await yolo!.predict(selectedImage!, confidenceThreshold: 0.5);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsView(results: results!,),));
+    } catch (e) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error al realizar la detección")
+      ));
+    } finally {
+      setState(() {isLoading = false;});
+    }
   }
 
 }
