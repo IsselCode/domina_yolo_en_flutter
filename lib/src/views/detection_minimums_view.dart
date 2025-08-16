@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:domina_yolo_en_flutter/core/app/consts.dart';
 import 'package:domina_yolo_en_flutter/src/views/results_view.dart';
+import 'package:domina_yolo_en_flutter/src/widgets/drop_down_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,7 +39,8 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
         title: Text("Detección minima"),
         centerTitle: true,
       ),
-      body: SafeArea(
+      body: Padding(
+        padding: const EdgeInsets.all(20),
         child: Center(
           child: Column(
             children: [
@@ -53,6 +56,21 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
                   SizedBox(width: 80,child: Center(child: Text("Camera"))),
                 ]
               ),
+
+              const SizedBox(height: 50,),
+
+              SizedBox(
+                width: 300,
+                child: DropDownWidget(
+                  selected: null,
+                  onChanged: (value) {
+                    print(value);
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 50,),
+
               Spacer(),
               Stack(
                 children: [
@@ -92,7 +110,7 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
               FilledButton(
                 onPressed: results != null ? () => viewResults(context) : null,
                 style: FilledButton.styleFrom(
-                    fixedSize: Size(width * 0.8, 50)
+                  fixedSize: Size(width * 0.8, 50)
                 ),
                 child: Text("Resultados")
               ),
