@@ -16,19 +16,32 @@ class ResultsView extends StatelessWidget {
         title: Text("Resultados"),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.memory(
-              results["annotatedImage"],
-              width: width * 0.8,
-              height: width * 0.8,
-            ),
-            const SizedBox(height: 20,),
-            Text("${results["boxes"].length}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
-            Text("Tubos detectados", style: TextStyle(fontSize: 18),)
-          ],
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.memory(
+                results["annotatedImage"],
+                width: width * 0.8,
+                height: width * 0.8,
+              ),
+              const SizedBox(height: 20,),
+              Text("${results["boxes"].length}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
+              Text("Tubos detectados", style: TextStyle(fontSize: 18),),
+
+              Spacer(),
+
+              FilledButton(
+                onPressed: () => print("Mostrar resultados"),
+                style: FilledButton.styleFrom(
+                  fixedSize: Size(width * 0.8, 50)
+                ),
+                child: Text("Guardar resultados")
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,8 +1,18 @@
 import 'package:domina_yolo_en_flutter/src/views/detection_minimums_view.dart';
 import 'package:domina_yolo_en_flutter/src/views/installation_view.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
