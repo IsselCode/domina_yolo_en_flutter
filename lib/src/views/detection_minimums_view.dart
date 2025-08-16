@@ -44,20 +44,6 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
         child: Center(
           child: Column(
             children: [
-              ToggleButtons(
-                onPressed: (index) {
-                  if (index == 1) {
-                    pickImage(ImageSource.camera);
-                  }
-                },
-                isSelected: [true, false],
-                children: const [
-                  SizedBox(width: 80,child: Center(child: Text("Gallery"))),
-                  SizedBox(width: 80,child: Center(child: Text("Camera"))),
-                ]
-              ),
-
-              const SizedBox(height: 50,),
 
               SizedBox(
                 width: 300,
@@ -71,7 +57,7 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
 
               const SizedBox(height: 50,),
 
-              Spacer(),
+              // Seleccion de imagen
               Stack(
                 children: [
                   InkWell(
@@ -86,6 +72,18 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
                       ),
                     ) : Image.memory(selectedImage!, width: width * 0.8, height: width * 0.8,),
                   ),
+                  // Abrir camara
+                  Positioned(
+                    top: 5,
+                    right: selectedImage == null ? 5 : 53,
+                    child: IconButton(
+                      style: IconButton.styleFrom(backgroundColor: Colors.white),
+                      onPressed: () => pickImage(ImageSource.camera),
+                      icon: Icon(Icons.camera_alt)
+                    ),
+                  ),
+                  // Limpiar imagen
+                  if (selectedImage != null)
                   Positioned(
                     top: 5,
                     right: 5,
@@ -98,7 +96,9 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
                   )
                 ],
               ),
+
               Spacer(),
+
               FilledButton(
                 onPressed: selectedImage != null && !isLoading ? detect : null,
                 style: FilledButton.styleFrom(
