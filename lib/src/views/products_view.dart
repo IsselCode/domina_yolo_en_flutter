@@ -1,6 +1,7 @@
 import 'package:domina_yolo_en_flutter/src/entities/product_entity.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/app/enums.dart';
 import '../widgets/grid_view_product_widget.dart';
 
 class ProductsView extends StatelessWidget {
@@ -28,8 +29,7 @@ class ProductsView extends StatelessWidget {
 
     List<ProductEntity> cloudProducts = [
       ProductEntity(
-        name: "T M8",
-        image: "assets/3.png",
+        type: ProductType.Tubos,
         quantity: 8,
         lastUpdated: DateTime.now()
       )

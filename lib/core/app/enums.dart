@@ -34,3 +34,24 @@ enum DeltaType {
   }
 
 }
+
+enum ProductType {
+  Tubos("Tubos"),
+  M8X16("M8X16"),
+  TM8("T M8");
+
+  final String label;
+  const ProductType(this.label);
+
+  static ProductType? fromString(String? v) {
+    if (v == null) return null;
+    try { return ProductType.values.byName(v); } catch (_) { return null; }
+  }
+}
+
+// Assets locales por producto (estáticos en la app)
+const Map<ProductType, String> productImageByType = {
+  ProductType.Tubos: 'assets/1.png',
+  ProductType.M8X16: 'assets/2.png',
+  ProductType.TM8: 'assets/3.png',
+};

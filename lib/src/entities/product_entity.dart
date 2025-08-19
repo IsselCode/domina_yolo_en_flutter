@@ -1,36 +1,28 @@
+import '../../core/app/enums.dart';
+
 class ProductEntity {
+  final ProductType type;
+  final int quantity;
+  final DateTime lastUpdated;
 
-  String name;
-  String image;
-  int quantity;
-  DateTime lastUpdated;
-
-  ProductEntity({
-    required this.name,
-    required this.image,
+  const ProductEntity({
+    required this.type,
     required this.quantity,
-    required this.lastUpdated
+    required this.lastUpdated,
   });
 
+  String get name => type.label;
+  String get image => productImageByType[type]!;
 }
 
-List<ProductEntity> staticProducts = [
-  ProductEntity(
-    name: "Tubos",
-    image: "assets/1.png",
-    quantity: 0,
-    lastUpdated: DateTime.now()
-  ),
-  ProductEntity(
-    name: "M8X16",
-    image: "assets/2.png",
-    quantity: 0,
-    lastUpdated: DateTime.now()
-  ),
-  ProductEntity(
-    name: "T M8",
-    image: "assets/3.png",
-    quantity: 0,
-    lastUpdated: DateTime.now()
-  ),
-];
+List<ProductEntity> staticProducts = List.generate(
+  ProductType.values.length,
+  (index) {
+    ProductType productType = ProductType.values[index];
+    return ProductEntity(
+      type: productType,
+      quantity: 0,
+      lastUpdated: DateTime.now()
+    );
+  },
+);
