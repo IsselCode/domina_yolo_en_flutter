@@ -36,7 +36,7 @@ class FirebaseModel {
   }
 
 // Cargar los 3 desde el único doc
-  Future<List<ProductEntity>> fetchAllProductsOptionB() async {
+  Future<List<ProductEntity>> getTotals() async {
     final db = FirebaseFirestore.instance;
     final doc = await db.doc('inventory/totals').get();
     return ProductType.values.map((t) => mapTotalsToEntity(doc, t)).toList();

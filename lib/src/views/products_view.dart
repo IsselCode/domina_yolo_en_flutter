@@ -1,12 +1,18 @@
+import 'package:domina_yolo_en_flutter/src/controllers/detection_controller.dart';
 import 'package:domina_yolo_en_flutter/src/entities/product_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../core/app/enums.dart';
 import '../widgets/grid_view_product_widget.dart';
 
-class ProductsView extends StatelessWidget {
+class ProductsView extends StatefulWidget {
   const ProductsView({super.key});
 
+  @override
+  State<ProductsView> createState() => _ProductsViewState();
+}
+
+class _ProductsViewState extends State<ProductsView> {
   /// Mantiene los slots y el orden de staticProducts,
   /// pero sobreescribe con los datos de cloud si el nombre coincide.
   List<ProductEntity> _mergeByName(
@@ -24,16 +30,17 @@ class ProductsView extends StatelessWidget {
     return staticProducts.map((p) => byName[p.name]!).toList();
   }
 
+  late Future<List<ProductEntity>> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    DetectionController detectionController = context.read();
+    _future = detectionController.getTotals();
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    List<ProductEntity> cloudProducts = [
-      ProductEntity(
-        type: ProductType.Tubos,
-        quantity: 8,
-        lastUpdated: DateTime.now()
-      )
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -43,12 +50,12 @@ class ProductsView extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(20),
         child: FutureBuilder(
-          future: Future.delayed(Duration(seconds: 2)),
+          future: _future,
           builder: (context, snapshot) {
 
             if (snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(),);
 
-            final cloud = cloudProducts ?? const <ProductEntity>[];
+            final cloud = snapshot.data ?? const <ProductEntity>[];
             final merged = _mergeByName(staticProducts, cloud);
 
             return GridView.builder(
