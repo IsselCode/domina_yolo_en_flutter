@@ -1,5 +1,6 @@
 import 'package:domina_yolo_en_flutter/src/views/detection_minimums_view.dart';
 import 'package:domina_yolo_en_flutter/src/views/installation_view.dart';
+import 'package:domina_yolo_en_flutter/src/views/products_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -26,10 +27,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        scaffoldBackgroundColor: Color(0xffe7e7e7),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const DetectionMinimumsView(),
+      home: const ProductsView(),
     );
   }
 }

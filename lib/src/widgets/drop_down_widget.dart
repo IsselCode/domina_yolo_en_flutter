@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/app/consts.dart';
+import '../../core/app/enums.dart';
 
 class DropDownWidget extends StatelessWidget {
   final TensorflowModel? selected;

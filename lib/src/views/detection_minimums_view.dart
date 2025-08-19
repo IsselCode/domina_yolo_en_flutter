@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:domina_yolo_en_flutter/core/app/consts.dart';
+import 'package:domina_yolo_en_flutter/core/app/enums.dart';
 import 'package:domina_yolo_en_flutter/src/views/results_view.dart';
 import 'package:domina_yolo_en_flutter/src/widgets/drop_down_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
