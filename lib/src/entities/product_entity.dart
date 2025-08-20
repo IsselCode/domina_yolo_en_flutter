@@ -13,6 +13,7 @@ class ProductEntity {
 
   String get name => type.label;
   String get image => productImageByType[type]!;
+  TensorflowModel get model => tensorflowModelByType[type]!;
 }
 
 List<ProductEntity> staticProducts = List.generate(

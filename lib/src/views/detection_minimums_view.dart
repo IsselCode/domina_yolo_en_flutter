@@ -2,16 +2,26 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:domina_yolo_en_flutter/core/app/enums.dart';
+import 'package:domina_yolo_en_flutter/src/controllers/tensorflow_model_controller.dart';
 import 'package:domina_yolo_en_flutter/src/views/results_view.dart';
 import 'package:domina_yolo_en_flutter/src/widgets/drop_down_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:ultralytics_yolo/ultralytics_yolo.dart';
 
+import '../entities/product_entity.dart';
+
 class DetectionMinimumsView extends StatefulWidget {
-  const DetectionMinimumsView({super.key});
+
+  final ProductEntity productEntity;
+
+  const DetectionMinimumsView({
+    super.key,
+    required this.productEntity,
+  });
 
   @override
   State<DetectionMinimumsView> createState() => _DetectionMinimumsViewState();
@@ -19,6 +29,16 @@ class DetectionMinimumsView extends StatefulWidget {
 
 class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
 
+  @override
+  void initState() {
+    super.initState();
+    // Iniciar modelo
+    loadModel(widget.productEntity.model);
+    // Al hacer esto, existe una instancia nativa pero no hay ninguna instancia
+    // en la variable Yolo.
+  }
+
+  // Cada vez que el usuario entra a esta vista, la variable es nula
   YOLO? yolo;
   Uint8List? selectedImage;
   bool isLoading = false;

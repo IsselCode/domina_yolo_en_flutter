@@ -55,3 +55,10 @@ const Map<ProductType, String> productImageByType = {
   ProductType.M8X16: 'assets/2.png',
   ProductType.TM8: 'assets/3.png',
 };
+
+// Modelos locales por producto (estáticos en la app)
+const Map<ProductType, TensorflowModel> tensorflowModelByType = {
+  ProductType.Tubos: TensorflowModel.pipes,
+  ProductType.M8X16: TensorflowModel.boxes,
+  ProductType.TM8: TensorflowModel.boxes,
+};

@@ -77,7 +77,7 @@ class _ProductsViewState extends State<ProductsView> {
                   lastUpdated: p.lastUpdated,
                   onTapIaButton: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DetectionMinimumsView(),)
+                    MaterialPageRoute(builder: (context) => DetectionMinimumsView(productEntity: p,),)
                   ),
                   onTap: () async {
                     final result = await stockMovementDialog(
