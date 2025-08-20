@@ -153,7 +153,11 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
     try {
       tfmController.isLoading = true;
       results = await tfmController.yolo!.predict(selectedImage!, confidenceThreshold: 0.5);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsView(results: results!,),));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsView(
+        results: results!,
+        classModel: widget.productEntity.classModel,
+        type: widget.productEntity.type,
+      )));
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

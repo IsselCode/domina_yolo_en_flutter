@@ -1,15 +1,25 @@
+import 'package:domina_yolo_en_flutter/core/app/enums.dart';
 import 'package:flutter/material.dart';
 
 class ResultsView extends StatelessWidget {
 
   final Map<String, dynamic> results;
+  final String classModel;
+  final ProductType type;
 
-  const ResultsView({super.key, required this.results});
+  const ResultsView({
+    super.key,
+    required this.results,
+    required this.classModel,
+    required this.type
+  });
 
   @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;
+
+    int total = results["boxes"].where( (element) => element["class"] == classModel).length;
 
     return Scaffold(
       appBar: AppBar(
@@ -28,8 +38,8 @@ class ResultsView extends StatelessWidget {
                 height: width * 0.8,
               ),
               const SizedBox(height: 20,),
-              Text("${results["boxes"].length}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
-              Text("Tubos detectados", style: TextStyle(fontSize: 18),),
+              Text("$total", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
+              Text(type.label, style: TextStyle(fontSize: 18),),
 
               Spacer(),
 

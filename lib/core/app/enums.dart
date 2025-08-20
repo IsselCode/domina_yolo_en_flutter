@@ -62,3 +62,10 @@ const Map<ProductType, TensorflowModel> tensorflowModelByType = {
   ProductType.M8X16: TensorflowModel.hardwareProducts,
   ProductType.TM8: TensorflowModel.hardwareProducts,
 };
+
+// Clases de modelo por producto
+const Map<ProductType, String> classesByType = {
+  ProductType.Tubos: "tubo",
+  ProductType.M8X16: "TornilloM8X16",
+  ProductType.TM8: "TuercaTM8",
+};
