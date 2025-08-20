@@ -1,3 +1,4 @@
+import 'package:domina_yolo_en_flutter/src/widgets/ai_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -8,6 +9,7 @@ class GridViewProductWidget extends StatelessWidget {
   final int qnty;
   final DateTime lastUpdated;
   final VoidCallback onTap;
+  final VoidCallback onTapIaButton;
 
 
   const GridViewProductWidget({
@@ -16,7 +18,8 @@ class GridViewProductWidget extends StatelessWidget {
     required this.name,
     required this.qnty,
     required this.lastUpdated,
-    required this.onTap
+    required this.onTap,
+    required this.onTapIaButton,
   });
 
   @override
@@ -69,6 +72,10 @@ class GridViewProductWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold
                     ),
                   ),
+                  const SizedBox(height: 10,),
+                  AiButtonWidget(
+                    onPressed: onTapIaButton,
+                  )
                 ],
               ),
             ),
