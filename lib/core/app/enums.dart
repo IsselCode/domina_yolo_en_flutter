@@ -3,9 +3,9 @@ enum TensorflowModel {
     nombre: "Clasificador de Tubos",
     asset: "tubos_float16",
   ),
-  boxes(
-    nombre: "Clasificador de Cajas",
-    asset: "cajas_float16",
+  hardwareProducts(
+    nombre: "Ferreteria",
+    asset: "ferreteria_float16",
   );
 
   final String nombre;
@@ -59,6 +59,6 @@ const Map<ProductType, String> productImageByType = {
 // Modelos locales por producto (estáticos en la app)
 const Map<ProductType, TensorflowModel> tensorflowModelByType = {
   ProductType.Tubos: TensorflowModel.pipes,
-  ProductType.M8X16: TensorflowModel.boxes,
-  ProductType.TM8: TensorflowModel.boxes,
+  ProductType.M8X16: TensorflowModel.hardwareProducts,
+  ProductType.TM8: TensorflowModel.hardwareProducts,
 };

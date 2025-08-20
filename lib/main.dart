@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:domina_yolo_en_flutter/src/controllers/detection_controller.dart';
+import 'package:domina_yolo_en_flutter/src/controllers/tensorflow_model_controller.dart';
 import 'package:domina_yolo_en_flutter/src/models/firebase_model.dart';
 import 'package:domina_yolo_en_flutter/src/views/detection_minimums_view.dart';
 import 'package:domina_yolo_en_flutter/src/views/installation_view.dart';
@@ -30,7 +31,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(create: (context) => FirebaseModel(firestore: FirebaseFirestore.instance),),
-        ChangeNotifierProvider(create: (context) => DetectionController(firebaseModel: context.read()),)
+        ChangeNotifierProvider(create: (context) => DetectionController(firebaseModel: context.read()),),
+        ChangeNotifierProvider(create: (context) => TensorflowModelController(),),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

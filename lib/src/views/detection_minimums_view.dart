@@ -32,26 +32,26 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
   @override
   void initState() {
     super.initState();
-    // Iniciar modelo
-    loadModel(widget.productEntity.model);
-    // Al hacer esto, existe una instancia nativa pero no hay ninguna instancia
-    // en la variable Yolo.
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      TensorflowModelController tfmController = context.read();
+      tfmController.loadModel(widget.productEntity.model);
+    },);
+
   }
 
   // Cada vez que el usuario entra a esta vista, la variable es nula
-  YOLO? yolo;
   Uint8List? selectedImage;
-  bool isLoading = false;
   Map<String, dynamic>? results;
 
   @override
   Widget build(BuildContext context) {
+    TensorflowModelController tfmController = context.watch();
 
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Detección minima"),
+        title: Text(widget.productEntity.model.nombre),
         centerTitle: true,
       ),
       body: Padding(
@@ -59,16 +59,6 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
         child: Center(
           child: Column(
             children: [
-
-              SizedBox(
-                width: 300,
-                child: DropDownWidget(
-                  selected: null,
-                  onChanged: (value) => loadModel(value!),
-                ),
-              ),
-
-              const SizedBox(height: 50,),
 
               // Seleccion de imagen
               Stack(
@@ -113,7 +103,7 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
               Spacer(),
 
               FilledButton(
-                onPressed: selectedImage != null && !isLoading ? detect : null,
+                onPressed: selectedImage != null && !tfmController.isLoading ? detect : null,
                 style: FilledButton.styleFrom(
                   fixedSize: Size(width * 0.8, 50),
                   disabledBackgroundColor: Colors.grey
@@ -125,26 +115,6 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
         ),
       ),
     );
-  }
-
-  Future<void> loadModel(TensorflowModel model) async {
-
-    isLoading = true;
-    setState(() {});
-
-    // Liberar instancia previa (si existe)
-    if (yolo != null) {
-      await yolo!.dispose(); // importante para limpiar la instancia nativa
-      yolo = null;
-    }
-
-    // Crear nueva instancia con el modelo seleccionado
-    yolo = YOLO(modelPath: model.asset, task: YOLOTask.detect);
-    await yolo!.loadModel();
-
-    // Finalizar para habilitar el botón nuevamente
-    isLoading = false;
-    setState(() {});
   }
 
   Future<void> pickImage(ImageSource source) async {
@@ -170,8 +140,9 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
   }
 
   Future<void> detect() async {
+    TensorflowModelController tfmController = context.read();
 
-    if (yolo == null) {
+    if (tfmController.yolo == null) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Necesitar seleccionar un modelo")
@@ -180,8 +151,8 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
     }
 
     try {
-      setState(() {isLoading = true;});
-      results = await yolo!.predict(selectedImage!, confidenceThreshold: 0.5);
+      tfmController.isLoading = true;
+      results = await tfmController.yolo!.predict(selectedImage!, confidenceThreshold: 0.5);
       Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsView(results: results!,),));
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -189,7 +160,7 @@ class _DetectionMinimumsViewState extends State<DetectionMinimumsView> {
         content: Text("Error al realizar la detección")
       ));
     } finally {
-      setState(() {isLoading = false;});
+      tfmController.isLoading = false;
     }
   }
 
