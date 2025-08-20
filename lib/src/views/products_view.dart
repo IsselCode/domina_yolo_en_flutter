@@ -79,8 +79,15 @@ class _ProductsViewState extends State<ProductsView> {
                     context,
                     MaterialPageRoute(builder: (context) => DetectionMinimumsView(),)
                   ),
-                  onTap: () {
-                    debugPrint('Abrir diálogo para "${p.name}"');
+                  onTap: () async {
+                    final result = await stockMovementDialog(
+                      context: context,
+                      productName: p.name,
+                      available: p.quantity
+                    );
+
+                    print(result!.deltaType);
+                    print(result.quantity);
                   },
                 );
               },
