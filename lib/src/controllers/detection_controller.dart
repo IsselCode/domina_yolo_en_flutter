@@ -14,6 +14,7 @@ class DetectionController extends ChangeNotifier {
 
   List<ProductEntity> products = staticProducts;
 
+
   /// Mantiene los slots y el orden de staticProducts,
   /// pero sobreescribe con los datos de cloud si el nombre coincide.
   List<ProductEntity> _mergeByName(List<ProductEntity> staticProducts, List<ProductEntity> cloudProducts,) {
@@ -34,17 +35,17 @@ class DetectionController extends ChangeNotifier {
     return true;
   }
 
-  // TODO: PROXIMO COMMIT
-  // Future<void> applyMovementToTotal(ProductType productType, DeltaType deltaType, int quantity,) async {
-  //
-  //   int signed = await firebaseModel.applyMovementToTotalsBatch(
-  //     productType: productType,
-  //     quantity: quantity
-  //   );
-  //
-  //   int indexProduct = products.indexWhere((element) => element.type.name == productType.name,);
-  //   products[indexProduct].quantity += signed;
-  //   notifyListeners();
-  // }
+  Future<void> applyMovementToTotal(ProductType productType, DeltaType deltaType, int quantity,) async {
+
+    int signed = await firebaseModel.applyMovementToTotalsBatch(
+      productType: productType,
+      deltaType: deltaType,
+      quantity: quantity
+    );
+
+    int indexProduct = products.indexWhere((element) => element.type.name == productType.name,);
+    products[indexProduct].quantity += signed;
+    notifyListeners();
+  }
 
 }

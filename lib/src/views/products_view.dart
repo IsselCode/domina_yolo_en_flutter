@@ -72,14 +72,13 @@ class _ProductsViewState extends State<ProductsView> {
                       available: p.quantity
                     );
 
-                    // TODO: PROXIMO COMMIT
-                    // if (result != null){
-                    //   await detectionController.applyMovementToTotal(
-                    //     p.type,
-                    //     result.deltaType,
-                    //     result.quantity
-                    //   );
-                    // }
+                    if (result != null){
+                      await detectionController.applyMovementToTotal(
+                        p.type,
+                        result.deltaType,
+                        result.quantity
+                      );
+                    }
                   },
                 );
               },

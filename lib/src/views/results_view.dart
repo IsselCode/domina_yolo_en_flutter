@@ -1,5 +1,8 @@
 import 'package:domina_yolo_en_flutter/core/app/enums.dart';
+import 'package:domina_yolo_en_flutter/src/controllers/detection_controller.dart';
+import 'package:domina_yolo_en_flutter/src/views/products_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ResultsView extends StatelessWidget {
 
@@ -44,7 +47,19 @@ class ResultsView extends StatelessWidget {
               Spacer(),
 
               FilledButton(
-                onPressed: () => print("Mostrar resultados"),
+                onPressed: () async {
+                  DetectionController detectionController = context.read();
+                  await detectionController.applyMovementToTotal(
+                    type,
+                    DeltaType.increase,
+                    total
+                  );
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProductsView(),),
+                    (route) => false,
+                  );
+                },
                 style: FilledButton.styleFrom(
                   fixedSize: Size(width * 0.8, 50)
                 ),

@@ -2,10 +2,10 @@ import '../../core/app/enums.dart';
 
 class ProductEntity {
   final ProductType type;
-  final int quantity;
+  int quantity;
   final DateTime lastUpdated;
 
-  const ProductEntity({
+  ProductEntity({
     required this.type,
     required this.quantity,
     required this.lastUpdated,
