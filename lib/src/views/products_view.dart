@@ -15,24 +15,8 @@ class ProductsView extends StatefulWidget {
 }
 
 class _ProductsViewState extends State<ProductsView> {
-  /// Mantiene los slots y el orden de staticProducts,
-  /// pero sobreescribe con los datos de cloud si el nombre coincide.
-  List<ProductEntity> _mergeByName(
-      List<ProductEntity> staticProducts,
-      List<ProductEntity> cloudProducts,
-      ) {
-    final byName = {for (final p in staticProducts) p.name: p};
-    for (final p in cloudProducts) {
-      if (byName.containsKey(p.name)) {
-        byName[p.name] = p;
-      }
-    }
 
-    // Respeta el orden original de staticProducts (y su longitud).
-    return staticProducts.map((p) => byName[p.name]!).toList();
-  }
-
-  late Future<List<ProductEntity>> _future;
+  late Future<bool> _future;
 
   @override
   void initState() {
@@ -43,6 +27,7 @@ class _ProductsViewState extends State<ProductsView> {
 
   @override
   Widget build(BuildContext context) {
+    DetectionController detectionController = context.watch();
 
     return Scaffold(
       appBar: AppBar(
@@ -57,18 +42,19 @@ class _ProductsViewState extends State<ProductsView> {
 
             if (snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(),);
 
-            final cloud = snapshot.data ?? const <ProductEntity>[];
-            final merged = _mergeByName(staticProducts, cloud);
+            if (!snapshot.hasData) {
+              return Center(child: Text("Ocurrio un error"),);
+            }
 
             return GridView.builder(
-              itemCount: merged.length,
+              itemCount: detectionController.products.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 mainAxisSpacing: 20,
                 crossAxisSpacing: 20,
               ),
               itemBuilder: (context, index) {
-                final p = merged[index];
+                final p = detectionController.products[index];
                 return GridViewProductWidget(
                   key: ValueKey(p.name),
                   image: p.image,
@@ -86,8 +72,14 @@ class _ProductsViewState extends State<ProductsView> {
                       available: p.quantity
                     );
 
-                    print(result!.deltaType);
-                    print(result.quantity);
+                    // TODO: PROXIMO COMMIT
+                    // if (result != null){
+                    //   await detectionController.applyMovementToTotal(
+                    //     p.type,
+                    //     result.deltaType,
+                    //     result.quantity
+                    //   );
+                    // }
                   },
                 );
               },
