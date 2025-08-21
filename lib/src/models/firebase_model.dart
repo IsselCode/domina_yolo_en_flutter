@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:domina_yolo_en_flutter/src/entities/history_entity.dart';
 
 import '../../core/app/enums.dart';
 import '../entities/product_entity.dart';
@@ -38,6 +39,16 @@ class FirebaseModel {
   Future<List<ProductEntity>> getTotals() async {
     final doc = await firestore.doc('inventory/totals').get();
     return ProductType.values.map((t) => mapTotalsToEntity(doc, t)).toList();
+  }
+
+  Future<List<HistoryProductEntity>> getHistoryMovements() async {
+
+    Query<Map<String, dynamic>> colRef = firestore.collection("inventoryMovements").orderBy("ts", descending: true);
+
+    QuerySnapshot<Map<String, dynamic>> querySnap = await colRef.get();
+
+    return querySnap.docs.map((d) => HistoryProductEntity.fromDoc(d)).toList();
+
   }
 
   Future<int> applyMovementToTotalsBatch({
