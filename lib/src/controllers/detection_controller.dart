@@ -1,3 +1,4 @@
+import 'package:domina_yolo_en_flutter/src/entities/history_entity.dart';
 import 'package:domina_yolo_en_flutter/src/models/firebase_model.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +34,10 @@ class DetectionController extends ChangeNotifier {
     List<ProductEntity> response = await firebaseModel.getTotals();
     products = _mergeByName(staticProducts, response);
     return true;
+  }
+
+  Future<List<HistoryProductEntity>> getHistoryMovements() async {
+    return await firebaseModel.getHistoryMovements();
   }
 
   Future<void> applyMovementToTotal(ProductType productType, DeltaType deltaType, int quantity,) async {
