@@ -1,6 +1,7 @@
 import 'package:domina_yolo_en_flutter/src/controllers/detection_controller.dart';
 import 'package:domina_yolo_en_flutter/src/dialogs/stock_movement_dialog.dart';
 import 'package:domina_yolo_en_flutter/src/entities/product_entity.dart';
+import 'package:domina_yolo_en_flutter/src/views/history_movements_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,6 +34,14 @@ class _ProductsViewState extends State<ProductsView> {
       appBar: AppBar(
         title: Text("Productos"),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HistoryMovementsView(),)),
+            icon: Icon(Icons.history)
+          )
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(20),
