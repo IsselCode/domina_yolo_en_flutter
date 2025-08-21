@@ -35,11 +35,48 @@ class FirebaseModel {
     );
   }
 
-// Cargar los 3 desde el único doc
   Future<List<ProductEntity>> getTotals() async {
-    final db = FirebaseFirestore.instance;
-    final doc = await db.doc('inventory/totals').get();
+    final doc = await firestore.doc('inventory/totals').get();
     return ProductType.values.map((t) => mapTotalsToEntity(doc, t)).toList();
   }
+
+  Future<int> applyMovementToTotalsBatch({
+    required ProductType productType,
+    required DeltaType deltaType,
+    required int quantity,
+  }) async {
+    assert(quantity > 0, 'La cantidad debe ser positiva');
+    // Variación neta ya con signo
+    final signed = deltaType == DeltaType.increase ? quantity : -quantity;
+
+    final totalsRef = firestore.doc('inventory/totals');
+    final movementRef = firestore.collection('inventoryMovements').doc();
+
+    final batch = firestore.batch();
+
+    // 1) Incremento/decremento atómico y timestamp por producto
+    batch.set(totalsRef, {
+      'stock': {
+        productType.name: FieldValue.increment(signed),
+      },
+      'lastUpdated': {
+        productType.name: FieldValue.serverTimestamp(),
+      },
+    }, SetOptions(merge: true));
+
+    // 2) Historial
+    batch.set(movementRef, {
+      'productId': productType.name,
+      'deltaType': deltaType.name,
+      'quantity': quantity,
+      'signedQuantity': signed,
+      'ts': FieldValue.serverTimestamp(),
+    });
+
+    await batch.commit();
+    return signed;
+  }
+
+
 
 }
