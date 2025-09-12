@@ -43,7 +43,7 @@ class FirebaseModel {
 
   Future<List<HistoryProductEntity>> getHistoryMovements() async {
 
-    Query<Map<String, dynamic>> colRef = firestore.collection("inventoryMovements").orderBy("ts", descending: true);
+    Query<Map<String, dynamic>> colRef = firestore.collection("inventoryMovements").orderBy("ts", descending: true).limit(12);
 
     QuerySnapshot<Map<String, dynamic>> querySnap = await colRef.get();
 

@@ -31,6 +31,7 @@ class DetectionController extends ChangeNotifier {
   }
 
   Future<bool> getTotals() async {
+    print("Obteniendo totales");
     List<ProductEntity> response = await firebaseModel.getTotals();
     products = _mergeByName(staticProducts, response);
     return true;

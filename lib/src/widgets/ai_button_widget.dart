@@ -60,7 +60,7 @@ class _GradientAiButtonState extends State<AiButtonWidget> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Icono
-                  const Icon(Icons.auto_awesome, color: Colors.white,),
+                  const Icon(Icons.auto_awesome, color: Colors.white, size: 16,),
                   // Texto
                   Text(
                     widget.label,
@@ -68,7 +68,7 @@ class _GradientAiButtonState extends State<AiButtonWidget> {
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.2,
-                      fontSize: 18,
+                      fontSize: 13,
                     ),
                   ),
                 ],

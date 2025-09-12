@@ -40,8 +40,9 @@ class _HistoryMovementsViewState extends State<HistoryMovementsView> {
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Shimmer.fromColors(
-                  baseColor: const Color(0xff18192c).withAlpha(100),
-                  highlightColor: const Color(0xff18192c).withAlpha(20),
+                  baseColor: const Color(0xffcfcfcf).withAlpha(150),
+                  // baseColor: const Color(0xff18192c).withAlpha(100),
+                  highlightColor: const Color(0xffcfcfcf).withAlpha(50),
                   child: Container(
                     width: double.infinity,
                     height: double.infinity,
@@ -63,24 +64,24 @@ class _HistoryMovementsViewState extends State<HistoryMovementsView> {
                 return ListTile(
                   tileColor: Colors.white,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  leading: Image.asset(hm.image, height: 80, width: 80,),
+                  leading: Image.asset(hm.image, height: 50, width: 50,),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Text(hm.productType.label)),
+                      Expanded(child: Text(hm.productType.label, overflow: TextOverflow.ellipsis,)),
                       Flex(
                         spacing: 20,
                         direction: Axis.horizontal,
                         children: [
                           SizedBox(
-                            width: 80,
+                            width: 65,
                             child: Text(
                               DateFormat("dd/MM/yy").format(hm.ts),
                               textAlign: TextAlign.end,
                             )
                           ),
                           SizedBox(
-                            width: 80,
+                            width: 60,
                             child: Text(
                               textAlign: TextAlign.end,
                               DateFormat("hh:mm:ss").format(hm.ts)
