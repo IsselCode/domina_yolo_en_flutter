@@ -1,12 +1,11 @@
 import 'package:domina_yolo_en_flutter/src/controllers/detection_controller.dart';
 import 'package:domina_yolo_en_flutter/src/dialogs/stock_movement_dialog.dart';
-import 'package:domina_yolo_en_flutter/src/entities/product_entity.dart';
 import 'package:domina_yolo_en_flutter/src/views/history_movements_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../widgets/grid_view_product_widget.dart';
 import 'detection_minimums_view.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 
 class ProductsView extends StatefulWidget {
   const ProductsView({super.key});
@@ -43,58 +42,68 @@ class _ProductsViewState extends State<ProductsView> {
           )
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: FutureBuilder(
-          future: _future,
-          builder: (context, snapshot) {
+      body: CustomMaterialIndicator(
+        onRefresh: () async {
+          DetectionController detectionController = context.read();
+          await detectionController.getTotals();
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Cantidades obtenidas")
+          ));
+        },
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: FutureBuilder(
+            future: _future,
+            builder: (context, snapshot) {
 
-            if (snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(),);
+              if (snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(),);
 
-            if (!snapshot.hasData) {
-              return Center(child: Text("Ocurrio un error"),);
-            }
+              if (!snapshot.hasData) {
+                return Center(child: Text("Ocurrio un error"),);
+              }
 
-            return GridView.builder(
-              itemCount: detectionController.products.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 20,
-                mainAxisExtent: 250,
-                crossAxisSpacing: 20,
-              ),
-              itemBuilder: (context, index) {
-                final p = detectionController.products[index];
-                return GridViewProductWidget(
-                  key: ValueKey(p.name),
-                  image: p.image,
-                  name: p.name,
-                  qnty: p.quantity,
-                  lastUpdated: p.lastUpdated,
-                  onTapIaButton: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DetectionMinimumsView(productEntity: p,),)
-                  ),
-                  onTap: () async {
-                    final result = await stockMovementDialog(
-                      context: context,
-                      productName: p.name,
-                      available: p.quantity
-                    );
-
-                    if (result != null){
-                      await detectionController.applyMovementToTotal(
-                        p.type,
-                        result.deltaType,
-                        result.quantity
+              return GridView.builder(
+                itemCount: detectionController.products.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 20,
+                  mainAxisExtent: 250,
+                  crossAxisSpacing: 20,
+                ),
+                itemBuilder: (context, index) {
+                  final p = detectionController.products[index];
+                  return GridViewProductWidget(
+                    key: ValueKey(p.name),
+                    image: p.image,
+                    name: p.name,
+                    qnty: p.quantity,
+                    lastUpdated: p.lastUpdated,
+                    onTapIaButton: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DetectionMinimumsView(productEntity: p,),)
+                    ),
+                    onTap: () async {
+                      final result = await stockMovementDialog(
+                        context: context,
+                        productName: p.name,
+                        available: p.quantity
                       );
-                    }
-                  },
-                );
-              },
-            );
 
-          },
+                      if (result != null){
+                        await detectionController.applyMovementToTotal(
+                          p.type,
+                          result.deltaType,
+                          result.quantity
+                        );
+                      }
+                    },
+                  );
+                },
+              );
+
+            },
+          ),
         ),
       ),
     );

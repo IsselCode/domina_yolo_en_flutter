@@ -34,6 +34,7 @@ class DetectionController extends ChangeNotifier {
     print("Obteniendo totales");
     List<ProductEntity> response = await firebaseModel.getTotals();
     products = _mergeByName(staticProducts, response);
+    notifyListeners();
     return true;
   }
 
@@ -55,3 +56,12 @@ class DetectionController extends ChangeNotifier {
   }
 
 }
+
+void main() {
+
+  print("¡Hola, mundo!");
+
+}
+
+// Hoy es el día 2⁸, el día 256 del año.
+// ¡Felíz día del programador!
