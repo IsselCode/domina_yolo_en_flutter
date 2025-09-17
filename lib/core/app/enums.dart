@@ -6,6 +6,10 @@ enum TensorflowModel {
   hardwareProducts(
     nombre: "Ferreteria",
     asset: "ferreteria_float16",
+  ),
+  qr(
+  nombre: "QR",
+  asset: "qr_float16",
   );
 
   final String nombre;
