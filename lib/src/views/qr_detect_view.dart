@@ -74,7 +74,7 @@ class _QrDetectViewState extends State<QrDetectView> {
     try {
       tfmController.isLoading = true;
       results = await tfmController.yolo!.predict(selectedImage!, confidenceThreshold: 0.4);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => QrResultView(results: results,)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => QrResultView(results: results, originalImage: selectedImage!,)));
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
