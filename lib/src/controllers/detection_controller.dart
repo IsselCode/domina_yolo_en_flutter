@@ -56,12 +56,3 @@ class DetectionController extends ChangeNotifier {
   }
 
 }
-
-void main() {
-
-  print("¡Hola, mundo!");
-
-}
-
-// Hoy es el día 2⁸, el día 256 del año.
-// ¡Felíz día del programador!

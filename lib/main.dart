@@ -5,6 +5,7 @@ import 'package:domina_yolo_en_flutter/src/models/firebase_model.dart';
 import 'package:domina_yolo_en_flutter/src/views/detection_minimums_view.dart';
 import 'package:domina_yolo_en_flutter/src/views/installation_view.dart';
 import 'package:domina_yolo_en_flutter/src/views/products_view.dart';
+import 'package:domina_yolo_en_flutter/src/views/select_app_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const ProductsView(),
+        home: const SelectAppView(),
       ),
     );
   }
