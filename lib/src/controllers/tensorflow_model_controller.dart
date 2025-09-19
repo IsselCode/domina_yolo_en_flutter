@@ -24,7 +24,7 @@ class TensorflowModelController extends ChangeNotifier {
     }
 
     // Crear nueva instancia con el modelo seleccionado
-    yolo = YOLO(modelPath: model.asset, task: YOLOTask.detect);
+    yolo = YOLO(modelPath: model.asset, task: YOLOTask.detect, useGpu: false);
     await yolo!.loadModel();
 
     // Finalizar para habilitar el botón nuevamente
