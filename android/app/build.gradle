@@ -11,7 +11,7 @@ plugins {
 android {
     namespace = "com.example.domina_yolo_en_flutter"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "28.0.13004108"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -39,9 +39,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.debug
-            // desactiva minify
-            minifyEnabled false
-            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
